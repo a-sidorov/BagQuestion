@@ -41,12 +41,12 @@ int main() {
 
   FILE *in = fopen("input.txt", "r");
 
-  fscanf(in, "%lu  %lld ", &N, &W);
+  fscanf(in, "%lu  %llu ", &N, &W);
 
   Item *items = calloc(N + 1, sizeof(Item));
 
   for (size_t i = 1; i < N + 1; ++i) {
-    fscanf(in, "%lld %lld", &items[i].w, &items[i].p);
+    fscanf(in, "%llu %llu", &items[i].w, &items[i].p);
   }
 
   fclose(in);
@@ -73,7 +73,7 @@ int main() {
 
   countPrice(A, items, inBag, N, W);
 
-  fprintf(out, "%lld %lu\n", pSum, count);
+  fprintf(out, "%llu %lld\n", pSum, count);
 
   printItems(inBag, N, out);
 
