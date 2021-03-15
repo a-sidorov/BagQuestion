@@ -19,15 +19,15 @@ void printItems(long long **A, long long *w, size_t k, long long s) {
   }
 }
 
-void countWeight(long long **A, long long *w, long long *p, size_t k, long long s) {
+void countPrice(long long **A, long long *w, long long *p, size_t k, long long s) {
   if (A[k][s] == 0) {
     return;
   }
 
   if (A[k - 1][s] == A[k][s]) {
-    countWeight(A, w, p, k - 1, s);
+    countPrice(A, w, p, k - 1, s);
   } else {
-    countWeight(A, w, p, k - 1, s - w[k]);
+    countPrice(A, w, p, k - 1, s - w[k]);
     count++;
     pSum += p[k];
   }
@@ -62,7 +62,7 @@ int main() {
     }
   }
 
-  countWeight(A, w, p, N, W);
+  countPrice(A, w, p, N, W);
 
   printf("%lld %lu\n", pSum, count);
 
