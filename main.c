@@ -5,11 +5,11 @@
 #define max(a, b) ((a) > (b) ? (a) : (b))
 
 size_t count = 0;
-long long pSum = 0;
+unsigned long long pSum = 0;
 
 typedef struct {
-  long long w;
-  long long p;
+  unsigned long long w;
+  unsigned long long p;
 } Item;
 
 void printItems(const bool *mask, size_t N, FILE *out) {
@@ -20,7 +20,7 @@ void printItems(const bool *mask, size_t N, FILE *out) {
   }
 }
 
-void countPrice(const long long **A, const Item *items, bool *inBag, const size_t N, long long W) {
+void countPrice(const unsigned long long **A, const Item *items, bool *inBag, const size_t N, unsigned long long W) {
   for (int i = N; i > 0; --i) {
     if (A[i][W] == 0) {
       break;
@@ -37,7 +37,7 @@ void countPrice(const long long **A, const Item *items, bool *inBag, const size_
 
 int main() {
   size_t N = 0;
-  long long W = 0;
+  unsigned long long W = 0;
 
   FILE *in = fopen("input.txt", "r");
 
@@ -51,14 +51,14 @@ int main() {
 
   fclose(in);
 
-  long long **A = calloc(N + 1, sizeof(long long *));
+  unsigned long long **A = calloc(N + 1, sizeof(unsigned long long *));
 
-  for (int i = 0; i < N + 1; ++i) {
-    A[i] = calloc(W + 1, sizeof(long long));
+  for (size_t i = 0; i < N + 1; ++i) {
+    A[i] = calloc(W + 1, sizeof(unsigned long long));
   }
 
   for (size_t k = 1; k < N + 1; ++k) {
-    for (long long s = 1; s < W + 1; ++s) {///Перебираем для каждого k все вместимости
+    for (unsigned long long s = 1; s < W + 1; ++s) {///Перебираем для каждого k все вместимости
       if (s >= items[k].w) {///Если текущий предмет вмещается в рюкзак
         A[k][s] = max(A[k - 1][s], A[k - 1][s - items[k].w] + items[k].p);////Выбираем класть его или нет
       } else {
