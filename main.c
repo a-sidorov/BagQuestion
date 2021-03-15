@@ -64,7 +64,7 @@ int main() {
 
   countWeight(A, w, p, N, W);
 
-  printf("%lu %lld\n", count, pSum);
+  printf("%lld %lu\n", pSum, count);
 
   printItems(A, w, N, W);
 
