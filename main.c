@@ -6,16 +6,16 @@
 size_t count = 0;
 long long pSum = 0;
 
-void printItems(long long **A, long long *w, size_t k, long long s) {
+void printItems(long long **A, long long *w, size_t k, long long s, FILE *out) {
   if (A[k][s] == 0) {
     return;
   }
 
   if (A[k - 1][s] == A[k][s]) {
-    printItems(A, w, k - 1, s);
+    printItems(A, w, k - 1, s, out);
   } else {
-    printItems(A, w, k - 1, s - w[k]);
-    printf("%lu ", k);
+    printItems(A, w, k - 1, s - w[k], out);
+    fprintf(out, "%lu ", k);
   }
 }
 
@@ -34,17 +34,21 @@ void countPrice(long long **A, long long *w, long long *p, size_t k, long long s
 }
 
 int main() {
-  size_t N = 5;
-  long long W = 13;
+  size_t N = 0;
+  long long W = 0;
 
-  scanf("%lu  %lld ", &N, &W);
+  FILE *in = fopen("input.txt", "r");
+
+  fscanf(in, "%lu  %lld ", &N, &W);
 
   long long *w = calloc(N + 1, sizeof(long long));
   long long *p = calloc(N + 1, sizeof(long long));
 
   for (size_t i = 1; i < N + 1; ++i) {
-    scanf("%lld %lld", &w[i], &p[i]);
+    fscanf(in, "%lld %lld", &w[i], &p[i]);
   }
+
+  fclose(in);
 
   long long **A = calloc(N + 1, sizeof(long long *));
 
@@ -62,11 +66,15 @@ int main() {
     }
   }
 
+  FILE *out = fopen("output.txt", "w");
+
   countPrice(A, w, p, N, W);
 
-  printf("%lld %lu\n", pSum, count);
+  fprintf(out, "%lld %lu\n", pSum, count);
 
-  printItems(A, w, N, W);
+  printItems(A, w, N, W, out);
+
+  fclose(out);
 
   for (int i = 0; i < N + 1; ++i) {
     free(A[i]);
