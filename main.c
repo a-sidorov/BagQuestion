@@ -21,7 +21,7 @@ void printItems(const bool *mask, size_t N, FILE *out) {
 }
 
 void countPrice(const unsigned long long **A, const Item *items, bool *inBag, const size_t N, unsigned long long W) {
-  for (int i = N; i > 0; --i) {
+  for (size_t i = N; i > 0; --i) {
     if (A[i][W] == 0) {
       break;
     }
