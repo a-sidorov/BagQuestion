@@ -73,7 +73,7 @@ int main() {
 
   countPrice(A, items, inBag, N, W);
 
-  fprintf(out, "%llu %lld\n", pSum, count);
+  fprintf(out, "%llu %lu\n", pSum, count);
 
   printItems(inBag, N, out);
 
