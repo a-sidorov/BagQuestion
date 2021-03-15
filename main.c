@@ -20,18 +20,18 @@ void printItems(const bool *mask, size_t N, FILE *out) {
   }
 }
 
-void countPrice(const long long **A, const Item *items, bool *inBag, const size_t N, const long long W) {
-  if (A[N][W] == 0) {
-    return;
-  }
+void countPrice(const long long **A, const Item *items, bool *inBag, const size_t N, long long W) {
+  for (int i = N; i > 0; --i) {
+    if (A[i][W] == 0) {
+      break;
+    }
 
-  if (A[N - 1][W] == A[N][W]) {
-    countPrice(A, items, inBag, N - 1, W);
-  } else {
-    countPrice(A, items, inBag, N - 1, W - items[N].w);
-    inBag[N] = true;
-    count++;
-    pSum += items[N].p;
+    if (A[i - 1][W] != A[i][W]) {
+      inBag[i] = true;
+      count++;
+      pSum += items[i].p;
+      W -= items[i].w;
+    }
   }
 }
 
