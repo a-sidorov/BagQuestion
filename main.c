@@ -73,6 +73,8 @@ int main() {
   }
 
   free(A);
+  free(w);
+  free(p);
 
   return 0;
 }
