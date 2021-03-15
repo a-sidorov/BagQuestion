@@ -1,35 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define max(a, b) ((a) > (b) ? (a) : (b))
 
 size_t count = 0;
 long long pSum = 0;
 
-void printItems(long long **A, long long *w, size_t k, long long s, FILE *out) {
-  if (A[k][s] == 0) {
-    return;
-  }
+typedef struct {
+  long long w;
+  long long p;
+} Item;
 
-  if (A[k - 1][s] == A[k][s]) {
-    printItems(A, w, k - 1, s, out);
-  } else {
-    printItems(A, w, k - 1, s - w[k], out);
-    fprintf(out, "%lu ", k);
+void printItems(const bool *mask, size_t N, FILE *out) {
+  for (size_t i = 1; i < N + 1; ++i) {
+    if (mask[i] == true) {
+      fprintf(out, "%lu ", i);
+    }
   }
 }
 
-void countPrice(long long **A, long long *w, long long *p, size_t k, long long s) {
-  if (A[k][s] == 0) {
+void countPrice(const long long **A, const Item *items, bool *inBag, const size_t N, const long long W) {
+  if (A[N][W] == 0) {
     return;
   }
 
-  if (A[k - 1][s] == A[k][s]) {
-    countPrice(A, w, p, k - 1, s);
+  if (A[N - 1][W] == A[N][W]) {
+    countPrice(A, items, inBag, N - 1, W);
   } else {
-    countPrice(A, w, p, k - 1, s - w[k]);
+    countPrice(A, items, inBag, N - 1, W - items[N].w);
+    inBag[N] = true;
     count++;
-    pSum += p[k];
+    pSum += items[N].p;
   }
 }
 
@@ -41,11 +43,10 @@ int main() {
 
   fscanf(in, "%lu  %lld ", &N, &W);
 
-  long long *w = calloc(N + 1, sizeof(long long));
-  long long *p = calloc(N + 1, sizeof(long long));
+  Item *items = calloc(N + 1, sizeof(Item));
 
   for (size_t i = 1; i < N + 1; ++i) {
-    fscanf(in, "%lld %lld", &w[i], &p[i]);
+    fscanf(in, "%lld %lld", &items[i].w, &items[i].p);
   }
 
   fclose(in);
@@ -58,8 +59,8 @@ int main() {
 
   for (size_t k = 1; k < N + 1; ++k) {
     for (long long s = 1; s < W + 1; ++s) {///Перебираем для каждого k все вместимости
-      if (s >= w[k]) {///Если текущий предмет вмещается в рюкзак
-        A[k][s] = max(A[k - 1][s], A[k - 1][s - w[k]] + p[k]);////Выбираем класть его или нет
+      if (s >= items[k].w) {///Если текущий предмет вмещается в рюкзак
+        A[k][s] = max(A[k - 1][s], A[k - 1][s - items[k].w] + items[k].p);////Выбираем класть его или нет
       } else {
         A[k][s] = A[k - 1][s];///Иначе, не кладем
       }
@@ -68,11 +69,13 @@ int main() {
 
   FILE *out = fopen("output.txt", "w");
 
-  countPrice(A, w, p, N, W);
+  bool *inBag = calloc(N + 1, sizeof(bool));
+
+  countPrice(A, items, inBag, N, W);
 
   fprintf(out, "%lld %lu\n", pSum, count);
 
-  printItems(A, w, N, W, out);
+  printItems(inBag, N + 1, out);
 
   fclose(out);
 
@@ -81,8 +84,8 @@ int main() {
   }
 
   free(A);
-  free(w);
-  free(p);
+  free(items);
+  free(inBag);
 
   return 0;
 }
