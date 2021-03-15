@@ -75,7 +75,7 @@ int main() {
 
   fprintf(out, "%lld %lu\n", pSum, count);
 
-  printItems(inBag, N + 1, out);
+  printItems(inBag, N, out);
 
   fclose(out);
 
